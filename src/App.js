@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import './App.css';
+import IsLoading from './components/IsLoading';
 import axios from 'axios';
 
 function App() {
 
 const [data, setData] = useState([]);
 const [spinner, setSpinner] = useState(true);
+const [errorMessage, setErrorMessage] = useState("");
+
 
 // useEffect(() => {
 //   fetch("https://6414d2b98dade07073c99e62.mockapi.io/users")
@@ -40,11 +43,19 @@ useEffect(() => {
 
   const getData = async() => {
     const res = await fetch("https://6414d2b98dade07073c99e62.mockapi.io/users");
-    const data = await res.json();
+
+    if (res.status > 399) {
+        setErrorMessage("OOPS resource not found");
+        setSpinner(false);
+    } else {
+      const data = await res.json();
     setData(data);
     setSpinner(false);
+
+    }
+
   }
-    setTimeout(() => getData(), 3000);
+    setTimeout(() => getData(), 2000);
 
 }, [])
 
@@ -53,10 +64,11 @@ console.log(data + " outside use effect");
 
   return (
     <div className="App">
-      <h1>hello world</h1>
-      {spinner && <h3>NOW LOADING</h3>}
+      <h1>AJAX ASSIGNMENT V1</h1>
+      {spinner && <IsLoading />}
+      {errorMessage}
       {data.map((user) => {
-        return <div key={user.id}>
+        return <div className="card" key={user.id}>
           <p>{user.name}</p>
           <img width="200" src={user.image} />
           </div>
@@ -68,15 +80,3 @@ console.log(data + " outside use effect");
 
 export default App;
 
-
-// https://drive.google.com/uc?id=1wAeYPro1Clw3-zIxXP4ndVqWIlQ4iaPE
-
-// https://drive.google.com/uc?id=1wIKfuTpNMxHzT7ye4UczBT6iziytW7cJ
-
-// https://drive.google.com/uc?id=1543Z2mMV09FVtcmC7CyR02z6Prg5tmDh
-
-// https://drive.google.com/uc?id=16RAU_-L_iMYv8uDwmkYPkLG4x04LFooJ
-
-// https://drive.google.com/file/d/1yld2bYOa3YMIhdP8TRRXdGckhly_f0Qy/view?usp=sharing
-
-// https://drive.google.com/file/d/1yld2bYOa3YMIhdP8TRRXdGckhly_f0Qy/view?usp=sharing
